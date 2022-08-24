@@ -3,7 +3,7 @@
 import 'package:flutter_architecture_testing/data/rest_client.dart';
 import 'package:dio/dio.dart';
 
-class SpaceXRemoteWrapper {
+class SpaceXRemoteService {
 
   RestClient getRestClient() {
     final dio = Dio();
