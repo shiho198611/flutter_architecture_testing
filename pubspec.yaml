@@ -50,6 +50,10 @@ dependencies:
 
   url_launcher: ^6.1.5
 
+  mockito: ^5.3.0
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -65,6 +69,9 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
+
+  bloc_test: ^9.0.0
+
 flutter:
 
   # The following line ensures that the Material Icons font is
