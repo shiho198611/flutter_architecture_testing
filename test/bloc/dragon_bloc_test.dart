@@ -30,7 +30,16 @@ void main() {
         return bloc;
       },
       act: (DragonBloc bloc) => bloc.add(DragonListQuery()),
-      expect: () => [isA<DragonUpdateStatus>()]);
+      expect: () => [isA<DragonUpdateStatus>()],
+      verify: (DragonBloc bloc) {
+        final result = bloc.state.remoteData as List<DragonShip>;
+
+        for(int i=0;i<result.length;i++) {
+          final ship = result[i];
+          expect(ship.name, "dragon_$i");
+        }
+      }, 
+  );
 }
 
 List<DragonShip> getMockDragonShips() {
