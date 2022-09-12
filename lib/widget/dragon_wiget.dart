@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_testing/bloc/dragon_bloc.dart';
 import 'package:flutter_architecture_testing/data/dragon_repository.dart';
-import 'package:flutter_architecture_testing/data/space_x_remote_service.dart';
 import 'package:flutter_architecture_testing/state/dragon_list_state.dart';
 import 'package:flutter_architecture_testing/state/query_action_status.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,14 +12,11 @@ class DragonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (_) => DragonRepository(context.read<SpaceXRemoteService>()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Space X Dragons"),
-        ),
-        body: const DragonListBlocWidget(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Space X Dragons"),
       ),
+      body: const DragonListBlocWidget(),
     );
   }
 }
@@ -30,9 +26,10 @@ class DragonListBlocWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dragonRepository = Provider.of<DragonRepository>(context);
+
     return BlocProvider(
-      create: (_) =>
-          DragonBloc(context.read<DragonRepository>())..add(DragonListQuery()),
+      create: (_) => DragonBloc(dragonRepository)..add(DragonListQuery()),
       child: const DragonList(),
     );
   }
@@ -75,7 +72,9 @@ class DragonListRouteState extends State<DragonList> with RouteAware {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(name,
-                                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold)),
                                 Padding(
                                     padding: const EdgeInsets.only(top: 20),
                                     child: GestureDetector(

@@ -26,7 +26,7 @@ void main() {
   blocTest("dragon list query emit[DragonUpdateStatus]",
       build: () {
         when(mockRepo.getDragons())
-            .thenAnswer((realInvocation) => Future(() => mockDragonShips));
+            .thenAnswer((realInvocation) => Future.value(mockDragonShips));
         return bloc;
       },
       act: (DragonBloc bloc) => bloc.add(DragonListQuery()),
