@@ -3,6 +3,7 @@ import 'package:flutter_architecture_testing/bloc/dragon_bloc.dart';
 import 'package:flutter_architecture_testing/data/dragon_repository.dart';
 import 'package:flutter_architecture_testing/state/dragon_list_state.dart';
 import 'package:flutter_architecture_testing/state/query_action_status.dart';
+import 'package:flutter_architecture_testing/widget/wrapper/network_image_load_wrapper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -38,6 +39,8 @@ class DragonListBlocWidget extends StatelessWidget {
 class DragonListRouteState extends State<DragonList> with RouteAware {
   @override
   Widget build(BuildContext context) {
+    final imgLoadWrapper = Provider.of<DragonImageLoadWrapper>(context);
+
     return BlocBuilder<DragonBloc, RemoteListUpdateStatus>(
       builder: (context, status) {
         if (status is DragonUpdateStatus) {
@@ -61,8 +64,8 @@ class DragonListRouteState extends State<DragonList> with RouteAware {
                           ? const Text("No Image")
                           : Padding(
                               padding: const EdgeInsets.all(20),
-                              child: Image.network(imageUrl,
-                                  width: 150, height: 150)),
+                              child: imgLoadWrapper.loadImage(imageUrl),
+                            ),
                       Align(
                           alignment: Alignment.topLeft,
                           child: Container(

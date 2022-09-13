@@ -3,12 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
+import 'package:flutter/material.dart' as _i2;
 import 'package:flutter_architecture_testing/data/dragon_repository.dart'
-    as _i2;
+    as _i3;
 import 'package:flutter_architecture_testing/data/remote/dragon_ship.dart'
-    as _i4;
+    as _i5;
+import 'package:flutter_architecture_testing/widget/wrapper/network_image_load_wrapper.dart'
+    as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -22,18 +25,44 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeImage_0 extends _i1.SmartFake implements _i2.Image {
+  _FakeImage_0(Object parent, Invocation parentInvocation)
+      : super(parent, parentInvocation);
+
+  @override
+  String toString({_i2.DiagnosticLevel? minLevel = _i2.DiagnosticLevel.info}) =>
+      super.toString();
+}
+
 /// A class which mocks [DragonRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDragonRepository extends _i1.Mock implements _i2.DragonRepository {
+class MockDragonRepository extends _i1.Mock implements _i3.DragonRepository {
   MockDragonRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<List<_i4.DragonShip>> getDragons() =>
+  _i4.Future<List<_i5.DragonShip>> getDragons() =>
       (super.noSuchMethod(Invocation.method(#getDragons, []),
               returnValue:
-                  _i3.Future<List<_i4.DragonShip>>.value(<_i4.DragonShip>[]))
-          as _i3.Future<List<_i4.DragonShip>>);
+                  _i4.Future<List<_i5.DragonShip>>.value(<_i5.DragonShip>[]))
+          as _i4.Future<List<_i5.DragonShip>>);
+}
+
+/// A class which mocks [DragonImageLoadWrapper].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockDragonImageLoadWrapper extends _i1.Mock
+    implements _i6.DragonImageLoadWrapper {
+  MockDragonImageLoadWrapper() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.Image loadImage(String? imgUrl) =>
+      (super.noSuchMethod(Invocation.method(#loadImage, [imgUrl]),
+              returnValue:
+                  _FakeImage_0(this, Invocation.method(#loadImage, [imgUrl])))
+          as _i2.Image);
 }
