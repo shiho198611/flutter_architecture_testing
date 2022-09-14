@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_architecture_testing/bloc/dragon_bloc.dart';
+import 'package:flutter_architecture_testing/data/dragon_repository.dart';
+import 'package:flutter_architecture_testing/data/space_x_remote_service.dart';
+import 'package:flutter_architecture_testing/widget/dragon_wiget.dart';
+import 'package:flutter_architecture_testing/widget/wrapper/network_image_load_wrapper.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+      providers: [Provider(create: (_) => SpaceXRemoteService())],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -10,8 +18,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
-    Provider();
+    final apiService = Provider.of<SpaceXRemoteService>(context);
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -27,7 +34,18 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: Provider(
+      //   create: (_) => DragonRepository(apiService),
+      //   child: const DragonWidget(),
+      // ),
+      home: MultiProvider(
+        providers: [
+          Provider(create: (_) => DragonRepository(apiService)),
+          Provider(create: (_) => DragonImageLoadWrapper()),
+        ],
+        child: const DragonWidget(),
+      ),
     );
   }
 }
