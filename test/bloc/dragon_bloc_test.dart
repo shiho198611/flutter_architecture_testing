@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_architecture_testing/bloc/dragon_bloc.dart';
 import 'package:flutter_architecture_testing/data/dragon_repository.dart';
@@ -23,22 +25,38 @@ void main() {
     mockDragonShips.addAll(getMockDragonShips());
   });
 
-  blocTest("dragon list query emit[DragonUpdateStatus]",
-      build: () {
-        when(mockRepo.getDragons())
-            .thenAnswer((realInvocation) => Future.value(mockDragonShips));
-        return bloc;
-      },
-      act: (DragonBloc bloc) => bloc.add(DragonListQuery()),
-      expect: () => [isA<DragonUpdateStatus>()],
-      verify: (DragonBloc bloc) {
-        final result = bloc.state.remoteData as List<DragonShip>;
+  blocTest(
+    "dragon list query has data and emit[DragonUpdateStatus]",
+    build: () {
+      when(mockRepo.getDragons())
+          .thenAnswer((realInvocation) => Future.value(mockDragonShips));
+      return bloc;
+    },
+    act: (DragonBloc bloc) => bloc.add(DragonListQuery()),
+    expect: () => [isA<DragonUpdateStatus>()],
+    verify: (DragonBloc bloc) {
+      final result = bloc.state.remoteData as List<DragonShip>;
 
-        for(int i=0;i<result.length;i++) {
-          final ship = result[i];
-          expect(ship.name, "dragon_$i");
-        }
-      }, 
+      for (int i = 0; i < result.length; i++) {
+        final ship = result[i];
+        expect(ship.name, "dragon_$i");
+      }
+    },
+  );
+
+  blocTest(
+    "dragon list query exception and emit[DragonUpdateStatus] remote list is empty",
+    build: () {
+      when(mockRepo.getDragons())
+          .thenThrow(const HttpException("This is mock http exception."));
+      return bloc;
+    },
+    act: (DragonBloc bloc) => bloc.add(DragonListQuery()),
+    expect: () => [isA<DragonUpdateStatus>()],
+    verify: (DragonBloc bloc) {
+      final result = bloc.state.remoteData as List<DragonShip>;
+      expect(result.isEmpty, true);
+    },
   );
 }
 

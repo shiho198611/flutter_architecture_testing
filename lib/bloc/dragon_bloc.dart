@@ -13,7 +13,11 @@ class DragonBloc extends Bloc<DragonListEvent, RemoteListUpdateStatus> {
 
     on<DragonListQuery>((event, emit) async {
 
-      List<DragonShip> dragons = await _dragonRepository.getDragons();
+      List<DragonShip> dragons = List.empty(growable: true);
+
+      try{
+         dragons.addAll(await _dragonRepository.getDragons());
+      } catch (_) {}
 
       emit(DragonUpdateStatus(dragons));
 

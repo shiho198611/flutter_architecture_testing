@@ -95,12 +95,15 @@ void main() {
 
   });
 
-  testWidgets("Load list empty and show empty text", (widgetTester) async {
+  testWidgets("Load list empty and show reload button", (widgetTester) async {
     final testWidget = MediaQuery(
       data: const MediaQueryData(),
       child: MaterialApp(
-        home: Provider.value(
-          value: mockRepo,
+        home: MultiProvider(
+          providers: [
+            Provider.value(value: mockRepo),
+            Provider.value(value: mockImgLoadWrapper),
+          ],
           child: const DragonWidget(),
         ),
       ),
@@ -115,7 +118,53 @@ void main() {
     await widgetTester.pumpWidget(testWidget);
     await widgetTester.pump();
 
-    expect(find.text("No Data"), findsOneWidget);
+    expect(find.text("Reload"), findsOneWidget);
+
+  });
+
+  testWidgets("Load first empty second reload and get reload data", (widgetTester) async {
+
+    int callTimes = 0;
+
+    final testWidget = MediaQuery(
+      data: const MediaQueryData(),
+      child: MaterialApp(
+        home: MultiProvider(
+          providers: [
+            Provider.value(value: mockRepo),
+            Provider.value(value: mockImgLoadWrapper),
+          ],
+          child: const DragonWidget(),
+        ),
+      ),
+    );
+
+    when(mockRepo.getDragons()).thenAnswer((realInvocation) {
+      if(callTimes == 0) {
+        callTimes ++;
+        return Future.value(
+          List.empty(growable: false),
+        );
+      } else {
+        return Future.value(dummyDragonShips);
+      }
+    });
+
+    when(
+      (mockImgLoadWrapper as MockDragonImageLoadWrapper).loadImage(any),
+    ).thenReturn(
+      dummyImage,
+    );
+
+    await widgetTester.pumpWidget(testWidget);
+    await widgetTester.pump();
+
+    await widgetTester.tap(find.text("Reload"));
+    await widgetTester.pump();
+
+    expect(find.text("Go to wiki"), findsWidgets);
+    expect(find.image(dummyImage.image), findsWidgets);
+
   });
 
   tearDown(() {

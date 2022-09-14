@@ -45,8 +45,19 @@ class DragonListRouteState extends State<DragonList> with RouteAware {
       builder: (context, status) {
         if (status is DragonUpdateStatus) {
           if (status.remoteData.isEmpty) {
-            return const Center(
-              child: Text("No Data", style: TextStyle(fontSize: 18)),
+            return Center(
+              // child: Text("No Data", style: TextStyle(fontSize: 18)),
+              child: ElevatedButton(
+                /**
+                 * OnPressed is trigger on runtime, so the parent widget(this case is "Center") must remove "const".
+                 *
+                 * see reference: https://devsolus.com/2022/07/20/flutter-3-invalid-constant-value-on-onpressed-value-from-another-file-component/
+                 * */
+                onPressed: () {
+                  context.read<DragonBloc>().add(DragonListQuery());
+                },
+                child: const Text("Reload", style: TextStyle(fontSize: 18)),
+              ),
             );
           } else {
             return ListView.builder(
